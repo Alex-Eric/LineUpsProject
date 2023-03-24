@@ -1,9 +1,16 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
+const axios = require("axios");
 
-/* GET home page */
 router.get("/maps", (req, res, next) => {
-  res.render("maps/maps");
+  axios.get("https://valorant-api.com/v1/maps")
+    .then(responseFromApi => {
+      console.log(res.data);
+      res.render("maps/maps", responseFromApi.data);
+    })
+    .catch((error) => {
+      console.log("Error to render Maps..." + error);
+    });
 });
 
 module.exports = router;
