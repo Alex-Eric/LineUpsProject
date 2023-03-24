@@ -6,6 +6,7 @@ const axios = require("axios")
 router.get("/agents", (req, res, next) => {
     axios.get("https://valorant-api.com/v1/agents")
     .then(responseFromAPI=> {
+        console.log(responseFromAPI.data)
         res.render("agents/agents",responseFromAPI.data);
     })
     .catch(error=>{
