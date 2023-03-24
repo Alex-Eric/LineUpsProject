@@ -13,4 +13,15 @@ router.get("/maps", (req, res, next) => {
     });
 });
 
+router.get("/maps/:id", (req,res,next)=>{
+  axios.get(`https://valorant-api.com/v1/maps/${req.params.id}`)
+  .then(responseFromApi =>{
+    res.render("maps/maps-details",responseFromApi.data)
+  })
+  .catch(error=>{
+    console.log("Error...: ",error)
+    next()
+  })  
+})
+
 module.exports = router;
