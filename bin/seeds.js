@@ -13,29 +13,48 @@ mongoose
     console.log(
       `Connected to Mongo! Database name: "${x.connections[0].name}"`
     );
-
-    //return Book.deleteMany({}); //WARNING: this will delete all books in your DB !!
   })
   .then(() => {
-    axios
-      .get("https://valorant-api.com/v1/maps")
-      .then((responseFromAPI) => {
-        return responseFromAPI.data;
-      })
-      .then((dataFromAPI) => {
-        const maps = [];
-        dataFromAPI.data.forEach((element) => {
-          maps.push({ name: element.displayName, image: element.splash });
+    return axios.get("https://valorant-api.com/v1/maps");
+  })
+  .then((responseFromAPI) => {
+    return responseFromAPI.data;
+  })
+  .then((dataFromAPI) => {
+    const maps = [];
+    dataFromAPI.data.forEach((element) => {
+      maps.push({ name: element.displayName, image: element.splash });
+    });
+    return Map.insertMany(maps);
+  })
+  .then((mapsFromDB) => {
+    console.log(`Created ${mapsFromDB.length} maps`);
+  })
+  .then(() => {
+    return axios.get("https://valorant-api.com/v1/agents");
+  })
+  .then((responseFromAPI) => {
+    return responseFromAPI.data;
+  })
+  .then((dataFromAPI) => {
+    const agents = [];
+    dataFromAPI.data.forEach((element) => {
+      if(element.isPlayableCharacter){
+        agents.push({
+          name: element.displayName,
+          image: element.displayIcon,
         });
-        return Map.insertMany(maps);
-      })
-      .then((mapsFromDB) => {
-        console.log(`Created ${mapsFromDB.length} maps`);
+      }
+    });
+    return Agent.insertMany(agents);
+  })
+  .then((agentsFromDB) => {
+    console.log(`Created ${agentsFromDB.length} agents`);
+    mongoose.connection.close();
+  })
 
-        // Once created, close the DB connection
-        mongoose.connection.close();
-      })
-      .catch((err) => {
-        console.error("Error connecting to DB: ", err);
-      });
+  // Once created, close the DB connection
+
+  .catch((err) => {
+    console.error("Error connecting to DB: ", err)
   });
