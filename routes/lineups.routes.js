@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const fileUploader = require('../config/cloudinary.config');
 const Lineup = require("../models/lineup.model")
+const Map = require("../models/Map.model");
+const Agent = require("../models/Agent.model");
 
 
 router.get("/lineups", (req, res, next) => {
@@ -16,7 +18,10 @@ router.get("/lineups", (req, res, next) => {
 
 
 router.get("/lineups/create", (req, res, next) => {
-  res.render("lineups/lineups-create");
+  Map.find()
+  .then(mapsArray=>{
+    res.render("lineups/lineups-create",{maps:mapsArray});
+  })
 });
 
 
