@@ -4,10 +4,12 @@ const fileUploader = require('../config/cloudinary.config');
 const Lineup = require("../models/lineup.model")
 const Map = require("../models/Map.model");
 const Agent = require("../models/Agent.model");
+const isUserLoggedIn = require("../middleware/isLoggedIn");
 
 
 router.get("/lineups", (req, res, next) => {
   Lineup.find()
+  .populate("map")
   .then(lineupFromDB=>{
     res.render("lineups/lineups",{lineup:lineupFromDB});
   })
@@ -17,7 +19,7 @@ router.get("/lineups", (req, res, next) => {
 });
 
 
-router.get("/lineups/create", (req, res, next) => {
+router.get("/lineups/create",isUserLoggedIn, (req, res, next) => {
   Map.find()
   .then(mapsArray=>{
     res.render("lineups/lineups-create",{maps:mapsArray});

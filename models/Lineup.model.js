@@ -20,8 +20,10 @@ const lineUpSchema = new Schema({
     ref: "Map",
   },
   agent: {
-    type: Schema.Types.ObjectId,
-    ref: "Agent",
+    // type: Schema.Types.ObjectId,
+    // ref: "Agent",
+    type: String,
+    required: true,
   },
 });
 
