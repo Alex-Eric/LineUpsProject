@@ -3,22 +3,25 @@
 <form action="/lineups/create" method="post" enctype="multipart/form-data">
   <label>
     Upload a video
-    <input type="file" name="video-lineup">
+    <input type="file" name="videoLineup">
     </label>
   <label>
     Agent:
     <select name="agent">
-      {{#each agent}}
+      <option value="Neon">Neon</option>
+
+      {{!-- {{#each agent}}
         <option value={{this._id}}>{{this.name}}</option>
-      {{/each}}
+      {{/each}} --}}
     </select>
   </label>
   <label>
     Map:
     <select name="map">
-      {{#each map}}
+      <option value="Icebox">Icebox</option>
+      {{!-- {{#each map}}
         <option value={{this._id}}>{{this.name}}</option>
-      {{/each}}
+      {{/each}} --}}
     </select>
   </label>
   <label>
