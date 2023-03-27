@@ -20,7 +20,4 @@ const lineUpSchema = new Schema(
     }
 )
 
-
-const lineup = model("lineup", lineUpSchema);
-
-module.exports = User;
+module.exports = model("lineup", lineUpSchema);

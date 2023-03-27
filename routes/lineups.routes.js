@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fileUploader = require('../config/cloudinary.config');
-const Lineup = require("../models/lineups.model")
+const Lineup = require("../models/lineup.model")
 
 
 router.get("/lineups", (req, res, next) => {
