@@ -2,21 +2,24 @@ const { Schema, model } = require("mongoose");
 
 const lineUpSchema = new Schema(
     {
+      title:{
+        type:String,
+        required: true,
+        unique: true
+      },
       videoLineup: {
         type: String,
-        required: true
+        required: true,
+        unique: true
       },
       attackDefense: {
         type: String,
         required: true,
-        unique: true,
       },
-
       map: {
         type: String,
         required: true,
       },
-
       agent: {
         type: String,
         required: true

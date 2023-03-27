@@ -21,8 +21,8 @@ router.get("/lineups/create", (req, res, next) => {
 
 
 router.post("/lineups/create",fileUploader.single('videoLineup'), (req, res, next) => {
-  const {agent,map,attackDefense} = req.body
-  Lineup.create({videoLineup:req.file.path,agent,map,attackDefense})
+  const {title,agent,map,attackDefense} = req.body
+  Lineup.create({videoLineup:req.file.path,title,agent,map,attackDefense})
   .then(()=>{
     res.redirect("/lineups")
   })
