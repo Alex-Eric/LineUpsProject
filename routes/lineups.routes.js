@@ -10,6 +10,7 @@ const isUserLoggedIn = require("../middleware/isLoggedIn");
 router.get("/lineups", (req, res, next) => {
   Lineup.find()
   .populate("map")
+  .populate("agent")
   .then(lineupFromDB=>{
     res.render("lineups/lineups",{lineup:lineupFromDB});
   })
@@ -20,9 +21,15 @@ router.get("/lineups", (req, res, next) => {
 
 
 router.get("/lineups/create",isUserLoggedIn, (req, res, next) => {
+  let mapArray
   Map.find()
   .then(mapsArray=>{
-    res.render("lineups/lineups-create",{maps:mapsArray});
+    mapArray = mapsArray
+    return Agent.find()
+  })
+  .then(agentsArray=>{
+    res.render("lineups/lineups-create",{maps:mapArray,agents:agentsArray});
+
   })
 });
 
@@ -40,6 +47,8 @@ router.post("/lineups/create",fileUploader.single('videoLineup'), (req, res, nex
 
 router.get("/lineups/:id",(req, res, next) => {
   Lineup.findById(req.params.id)
+  .populate("map")
+  .populate("agent")
   .then(lineupFromDB=>{
     console.log(lineupFromDB)
     res.render("lineups/lineups-details",lineupFromDB);

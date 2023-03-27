@@ -9,7 +9,6 @@ const lineUpSchema = new Schema({
   videoLineup: {
     type: String,
     required: true,
-    unique: true,
   },
   attackDefense: {
     type: String,
@@ -20,10 +19,8 @@ const lineUpSchema = new Schema({
     ref: "Map",
   },
   agent: {
-    // type: Schema.Types.ObjectId,
-    // ref: "Agent",
-    type: String,
-    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "Agent",
   },
 });
 

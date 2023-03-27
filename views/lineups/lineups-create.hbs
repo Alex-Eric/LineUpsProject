@@ -1,33 +1,31 @@
-<h2>Create a lineup!</h2>
+<h2 class="text-white">Create a lineup!</h2>
 
 <form action="/lineups/create" method="post" enctype="multipart/form-data">
-  <label>
+  <label class="text-white">
     Upload a video
     <input type="file" name="videoLineup" />
   </label>
-  <label>
+  <label class="text-white">
     Title:
     <input type="text" name="title"/>
   </label>
-  <label>
+  <label class="text-white">
     Agent:
     <select name="agent">
-      <option value="Neon">Neon</option>
-
-      {{!-- {{#each agent}}
-        <option value={{this._id}}>{{this.name}}</option>
-      {{/each}} --}}
-    </select>
-  </label>
-  <label>
-    Map:
-    <select name="map">
-      {{#each maps}}
+      {{#each agents}}
         <option value={{this._id}}>{{this.name}}</option>
       {{/each}}
     </select>
   </label>
-  <label>
+  <label class="text-white">
+    Map:
+    <select name="map">
+      {{#each maps}}
+        <option value={{this._id}} >{{this.name}}</option>
+      {{/each}}
+    </select>
+  </label>
+  <label class="text-white">
     Attack/Defense:
     <select name="attackDefense">
       <option value="attack">Attack</option>
