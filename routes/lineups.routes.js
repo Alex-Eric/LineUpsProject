@@ -5,7 +5,13 @@ const Lineup = require("../models/lineup.model")
 
 
 router.get("/lineups", (req, res, next) => {
-  res.render("lineups/lineups");
+  Lineup.find()
+  .then(lineupFromDB=>{
+    res.render("lineups/lineups",{lineup:lineupFromDB});
+  })
+  .catch((error) => {
+    res.send("Error to create lineups..." + error)
+  });
 });
 
 
@@ -14,14 +20,25 @@ router.get("/lineups/create", (req, res, next) => {
 });
 
 
-router.post("/lineups/create",fileUploader.single('video-lineup'), (req, res, next) => {
+router.post("/lineups/create",fileUploader.single('videoLineup'), (req, res, next) => {
   const {agent,map,attackDefense} = req.body
-  Lineup.create({video:req.file.path,agent,map,attackDefense})
+  Lineup.create({videoLineup:req.file.path,agent,map,attackDefense})
   .then(()=>{
     res.redirect("/lineups")
   })
   .catch((error) => {
-    console.log("Error to create lineups..." + error);
+    res.send("Error to create lineups..." + error)
+  });
+});
+
+router.get("/lineups/:id",(req, res, next) => {
+  Lineup.findById(req.params.id)
+  .then(lineupFromDB=>{
+    console.log(lineupFromDB)
+    res.render("lineups/lineups-details",lineupFromDB);
+  })
+  .catch((error) => {
+    res.send("Error to create lineups..." + error)
   });
 });
 
