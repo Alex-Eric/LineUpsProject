@@ -8,7 +8,7 @@ const isUserLoggedIn = require("../middleware/isLoggedIn");
 const { route } = require('./maps.routes');
 
 
-
+//GET LINEUPS
 router.get("/lineups", (req, res, next) => {
   
   Lineup.find()
@@ -22,7 +22,7 @@ router.get("/lineups", (req, res, next) => {
   });
 });
 
-
+//GET CREATE LINEUPS
 router.get("/lineups/create",isUserLoggedIn, (req, res, next) => {
   let mapArray
   Map.find()
@@ -37,6 +37,7 @@ router.get("/lineups/create",isUserLoggedIn, (req, res, next) => {
 });
 
 
+//POST CREATE LINEUPS
 router.post("/lineups/create",fileUploader.single('videoUrl'), (req, res, next) => {
   const {title,agent,map,lineUpType} = req.body
   Lineup.create({title,videoUrl:req.file.path,lineUpType,map,agent})
@@ -48,6 +49,8 @@ router.post("/lineups/create",fileUploader.single('videoUrl'), (req, res, next) 
   });
 });
 
+
+//GET LINEUPS ID
 router.get("/lineups/:id",(req, res, next) => {
   Lineup.findById(req.params.id)
   .populate("map")
@@ -60,6 +63,8 @@ router.get("/lineups/:id",(req, res, next) => {
   });
 });
 
+
+//GET LINEUPS UPDATE
 router.get("/lineups/:id/update",(req, res, next)=>{
   let maps = []
   let agents = []
@@ -82,9 +87,22 @@ router.get("/lineups/:id/update",(req, res, next)=>{
 })
 
 
+//POST LINEUPS UPDATE
 router.post("/lineups/:id/update",(req,res,next)=>{
   const {title,agent,map,lineUpType} = req.body
   Lineup.findByIdAndUpdate(req.params.id, {title,agent,map,lineUpType})
+  .then(()=>{
+    res.redirect("/lineups")
+  })
+  .catch((error) => {
+    res.send("Error to update lineups..." + error)
+  });
+})
+
+
+//POST LINEUPS DELETE
+router.post("/lineups/:id/delete",(req,res,next)=>{
+  Lineup.findByIdAndRemove(req.params.id)
   .then(()=>{
     res.redirect("/lineups")
   })

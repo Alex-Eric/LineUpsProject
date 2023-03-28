@@ -9,7 +9,9 @@
       <h5 class="card-title text-white">{{agent.name}}</h5>
       <h5 class="card-title text-white">{{map.name}}</h5>
       <h5 class="card-title text-white">{{lineUpType}}</h5>
-      <button>Delete</button>
+      <form action="/lineups/{{id}}/delete" method="post">
+        <button>Delete</button>
+      </form>
     </div>
   </div>
 </div>
