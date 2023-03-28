@@ -1,0 +1,38 @@
+<h2 class="text-white"> Update a lineup!</h2>
+
+<form action="/lineups/create" method="post" enctype="multipart/form-data">
+  <label class="text-white">
+    Upload a video
+    <input type="file" name="videoLineup" />
+  </label>
+  <label class="text-white">
+    Title:
+    <input type="text" name="title"/>
+  </label>
+  <label class="text-white">
+    Agent:
+    <select name="agent">
+      {{#each agents}}
+        <option value={{this._id}}>{{this.name}}</option>
+      {{/each}}
+    </select>
+  </label>
+  <label class="text-white">
+    Map:
+    <select name="map">
+      {{#each maps}}
+        <option value={{this._id}} >{{this.name}}</option>
+      {{/each}}
+    </select>
+  </label>
+  <label class="text-white">
+    Attack/Defense:
+    <select name="attackDefense">
+      <option value="attack">Attack</option>
+      <option value="defense">Defense</option>
+      <option value="both">Both</option>
+    </select>
+  </label>
+
+  <button>Update</button>
+</form>

@@ -50,12 +50,22 @@ router.get("/lineups/:id",(req, res, next) => {
   .populate("map")
   .populate("agent")
   .then(lineupFromDB=>{
-    console.log(lineupFromDB)
     res.render("lineups/lineups-details",lineupFromDB);
   })
   .catch((error) => {
     res.send("Error to create lineups..." + error)
   });
 });
+
+router.get("/lineups/:id/lineups-update"),(req,res,next)=>{
+  const {title,agent,map,attackDefense} = req.params
+  Lineup.findById({title,agent,map,attackDefense})
+  .then(()=>{
+    res.render("/lineups/lineups-update")
+  })
+  .catch((error) => {
+    res.send("Error to update lineups..." + error)
+  });
+}
 
 module.exports = router;
