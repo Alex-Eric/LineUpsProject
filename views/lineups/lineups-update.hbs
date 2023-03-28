@@ -10,18 +10,16 @@
   <label class="text-white">
     Agent:
     <select name="agent">
+      <option value={{lineup.agent}} disabled selected hidden>{{lineup.agent.name}}</option>
       {{#each agents}}
-        {{#ifCond lineup.agent this._id}}
-          <option selected value={{this._id}}>{{this.name}}</option>
-        {{else}}
           <option value={{this._id}}>{{this.name}}</option>
-        {{/ifCond}}
       {{/each}}
     </select>
   </label>
   <label class="text-white">
     Map:
     <select name="map">
+      <option value={{lineup.map}} disabled selected hidden>{{lineup.map.name}}</option>
       {{#each maps}}
         <option value={{this._id}}>{{this.name}}</option>
       {{/each}}

@@ -70,9 +70,10 @@ router.get("/lineups/:id/update",(req, res, next)=>{
   })
   .then((agentsFromDB)=>{
     agents = agentsFromDB
-    return Lineup.findById(req.params.id)
+    return Lineup.findById(req.params.id).populate("agent").populate("map")
   })
  .then((lineupFromDb)=>{
+  console.log(lineupFromDb)
   res.render("lineups/lineups-update", {lineup: lineupFromDb,maps,agents} )
  })
  .catch((error) => {
