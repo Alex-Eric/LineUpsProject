@@ -5,6 +5,8 @@ const Lineup = require("../models/lineup.model")
 const Map = require("../models/Map.model");
 const Agent = require("../models/Agent.model");
 const isUserLoggedIn = require("../middleware/isLoggedIn");
+const { route } = require('./maps.routes');
+
 
 
 router.get("/lineups", (req, res, next) => {
@@ -36,7 +38,6 @@ router.get("/lineups/create",isUserLoggedIn, (req, res, next) => {
 
 
 router.post("/lineups/create",fileUploader.single('videoUrl'), (req, res, next) => {
-  console.log(req)
   const {title,agent,map,lineUpType} = req.body
   Lineup.create({title,videoUrl:req.file.path,lineUpType,map,agent})
   .then(()=>{
@@ -59,15 +60,36 @@ router.get("/lineups/:id",(req, res, next) => {
   });
 });
 
-router.get("/lineups/:id/lineups-update"),(req,res,next)=>{
-  const {title,agent,map,lineUpType} = req.params
-  Lineup.findById({title,agent,map,lineUpType})
+router.get("/lineups/:id/update",(req, res, next)=>{
+  let maps = []
+  let agents = []
+  Map.find()
+  .then((mapsFromDB)=>{
+    maps = mapsFromDB
+    return Agent.find()
+  })
+  .then((agentsFromDB)=>{
+    agents = agentsFromDB
+    return Lineup.findById(req.params.id)
+  })
+ .then((lineupFromDb)=>{
+  res.render("lineups/lineups-update", {lineup: lineupFromDb,maps,agents} )
+ })
+ .catch((error) => {
+  res.send("Error to show lineup..." + error)
+});
+})
+
+
+router.post("/lineups/:id/update",(req,res,next)=>{
+  const {title,agent,map,lineUpType} = req.body
+  Lineup.findByIdAndUpdate(req.params.id, {title,agent,map,lineUpType})
   .then(()=>{
-    res.render("/lineups/lineups-update")
+    res.redirect("/lineups")
   })
   .catch((error) => {
     res.send("Error to update lineups..." + error)
   });
-}
+})
 
 module.exports = router;

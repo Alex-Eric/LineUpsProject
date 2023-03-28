@@ -1,19 +1,21 @@
+
+
 <h2 class="text-white"> Update a lineup!</h2>
 
-<form action="/lineups/create" method="post" enctype="multipart/form-data">
-  <label class="text-white">
-    Upload a video
-    <input type="file" name="videoUrl" />
-  </label>
+<form action="/lineups/{{lineup._id}}/update" method="post">
   <label class="text-white">
     Title:
-    <input type="text" name="title"/>
+    <input type="text" name="title" value={{lineup.title}} />
   </label>
   <label class="text-white">
     Agent:
     <select name="agent">
       {{#each agents}}
-        <option value={{this._id}}>{{this.name}}</option>
+        {{#ifCond lineup.agent this._id}}
+          <option selected value={{this._id}}>{{this.name}}</option>
+        {{else}}
+          <option value={{this._id}}>{{this.name}}</option>
+        {{/ifCond}}
       {{/each}}
     </select>
   </label>
@@ -21,7 +23,7 @@
     Map:
     <select name="map">
       {{#each maps}}
-        <option value={{this._id}} >{{this.name}}</option>
+        <option value={{this._id}}>{{this.name}}</option>
       {{/each}}
     </select>
   </label>
@@ -33,6 +35,6 @@
       <option value="both">Both</option>
     </select>
   </label>
-
   <button>Update</button>
 </form>
+
