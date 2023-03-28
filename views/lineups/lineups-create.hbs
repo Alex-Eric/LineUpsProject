@@ -1,37 +1,52 @@
-<h2 class="text-white">Create a lineup!</h2>
+<h2 class="text-white text-center">Create a lineup!</h2>
 
 <form action="/lineups/create" method="post" enctype="multipart/form-data">
-  <label class="text-white">
-    Upload a video
-    <input type="file" name="videoUrl" />
-  </label>
-  <label class="text-white">
-    Title:
-    <input type="text" name="title"/>
-  </label>
-  <label class="text-white">
-    Agent:
-    <select name="agent">
-      {{#each agents}}
-        <option value={{this._id}}>{{this.name}}</option>
-      {{/each}}
-    </select>
-  </label>
-  <label class="text-white">
-    Map:
-    <select name="map">
-      {{#each maps}}
-        <option value={{this._id}} >{{this.name}}</option>
-      {{/each}}
-    </select>
-  </label>
-  <label class="text-white">
-    Attack/Defense:
-    <select name="lineUpType">
-      <option value="attack">Attack</option>
-      <option value="defense">Defense</option>
-    </select>
-  </label>
-
-  <button>Create</button>
+  <div class="row d-flex justify-content-center align-items-center">
+    <div class="col-7">
+      <label class="form-label text-white">
+        Upload a video
+      </label>
+      <input type="file" name="videoUrl" class="btn btn-dark text-white"/>
+    </div>
+    <div class="col-7">
+      <label class="form-label text-white">
+        Title:
+      </label>
+        <input type="text" name="title" class="form-control"/>
+    </div>
+    <div class="col-7">
+      <label class="form-label text-white">
+        Agent:
+      </label>
+        <select name="agent" class="form-select">
+          {{#each agents}}
+            <option value={{this._id}}>{{this.name}}</option>
+          {{/each}}
+        </select>
+    </div>
+    <div class="col-7">
+      <label class="form-label text-white">
+        Map:
+      </label>
+        <select name="map" class="form-select">
+          {{#each maps}}
+            <option value={{this._id}}>{{this.name}}</option>
+          {{/each}}
+        </select>
+    </div>
+    <div class="col-7">
+      <label class="form-label text-white">
+        Attack/Defense:
+      </label>
+        <select name="lineUpType" class="form-select">
+          <option value="attack">Attack</option>
+          <option value="defense">Defense</option>
+        </select>
+    </div>
+  </div>
+  <div class="row mt-4 justify-content-center">
+    <div class="col-4">
+      <button class="btn btn-secondary w-100">Create</button>
+    </div>
+  </div>
 </form>
