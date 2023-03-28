@@ -1,10 +1,10 @@
 const { Schema, model } = require("mongoose");
 
-const lineUpSchema = new Schema({
+const lineUpSchema = {
   title: {
     type: String,
     required: true,
-    unique: true,
+
   },
   videoLineup: {
     type: String,
@@ -22,6 +22,6 @@ const lineUpSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Agent",
   },
-});
+};
 
 module.exports = model("lineup", lineUpSchema);
