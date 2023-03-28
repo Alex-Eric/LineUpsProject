@@ -8,6 +8,7 @@ const isUserLoggedIn = require("../middleware/isLoggedIn");
 
 
 router.get("/lineups", (req, res, next) => {
+  
   Lineup.find()
   .populate("map")
   .populate("agent")
@@ -35,8 +36,9 @@ router.get("/lineups/create",isUserLoggedIn, (req, res, next) => {
 
 
 router.post("/lineups/create",fileUploader.single('videoLineup'), (req, res, next) => {
+  console.log(req)
   const {title,agent,map,attackDefense} = req.body
-  Lineup.create({videoLineup:req.file.path,title,agent,map,attackDefense})
+  Lineup.create({title,videoLineup:req.file.path,attackDefense,map,agent})
   .then(()=>{
     res.redirect("/lineups")
   })
