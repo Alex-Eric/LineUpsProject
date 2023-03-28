@@ -16,7 +16,7 @@ const lineUpSchema = {
   lineUpType: {
     type: String,
     required: true,
-    enum: ["attack", "defense", "both"]
+    enum: ["attack", "defense"]
   },
   map: {
     type: Schema.Types.ObjectId,

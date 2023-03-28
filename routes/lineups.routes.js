@@ -28,9 +28,43 @@ router.get("/lineups", (req, res, next) => {
     .catch((error) => {
       res.send("Error to create lineups..." + error);
     });
+  const agentFilter = req.query.agent
+  const mapFilter = req.query.map
+  const lineUpTypeFilter = req.query.lineUpType
+  let filter = {}
+  if (agentFilter&&mapFilter&&lineUpTypeFilter){
+    filter = {agent: {$eq: agentFilter},map:{$eq: mapFilter},lineUpType:{$eq: lineUpTypeFilter}}
+  } 
+  if (agentFilter === "all"){
+    filter["agent"] = {$exists:true}
+  }
+  if (mapFilter === "all"){
+    filter["map"] = {$exists:true}
+  }
+  if (lineUpTypeFilter === "all"){
+    filter["lineUpType"] = {$exists:true}
+  }
+  console.log(filter)
+  let maps = []
+  let agents = []
+  Map.find()
+  .then((mapsFromDB)=>{
+    maps = mapsFromDB
+    return Agent.find()
+  })
+  .then((agentsFromDB)=>{
+    agents = agentsFromDB
+    return Lineup.find(filter).populate("map").populate("agent")
+  })
+  .then(lineupFromDB=>{
+    res.render("lineups/lineups",{lineup: lineupFromDB,maps,agents});
+  })
+  .catch((error) => {
+    res.send("Error to create lineups..." + error)
+  });
 });
 
-router.get("/lineups/create", isLoggedIn, (req, res, next) => {
+//GET CREATE LINEUPSrouter.get("/lineups/create", isLoggedIn, (req, res, next) => {
   let mapArray;
   Map.find()
     .then((mapsArray) => {
@@ -46,6 +80,27 @@ router.get("/lineups/create", isLoggedIn, (req, res, next) => {
     .catch((error) => {
       res.send("Error to create lineups..." + error);
     });
+  .then(mapsArray=>{
+    mapArray = mapsArray
+    return Agent.find()
+  })
+  .then(agentsArray=>{
+    res.render("lineups/lineups-create",{maps:mapArray,agents:agentsArray});
+
+  })
+});
+
+
+//POST CREATE LINEUPS
+router.post("/lineups/create",fileUploader.single('videoUrl'), (req, res, next) => {
+  const {title,agent,map,lineUpType} = req.body
+  Lineup.create({title,videoUrl:req.file.path,lineUpType,map,agent})
+  .then(()=>{
+    res.redirect("/lineups")
+  })
+  .catch((error) => {
+    res.send("Error to create lineups..." + error)
+  });
 });
 
 router.post(
@@ -85,6 +140,11 @@ router.get("/lineups/:id", (req, res, next) => {
 router.get("/lineups/:id/update", isLoggedIn, (req, res, next) => {
   let maps = [];
   let agents = [];
+
+//GET LINEUPS UPDATE
+router.get("/lineups/:id/update",(req, res, next)=>{
+  let maps = []
+  let agents = []
   Map.find()
     .then((mapsFromDB) => {
       maps = mapsFromDB;
@@ -106,6 +166,7 @@ router.get("/lineups/:id/update", isLoggedIn, (req, res, next) => {
     });
 });
 
+//POST LINEUPS UPDATE
 router.post("/lineups/:id/update", (req, res, next) => {
   const { title, agent, map, lineUpType } = req.body;
   Lineup.findByIdAndUpdate(req.params.id, { title, agent, map, lineUpType })
@@ -116,5 +177,17 @@ router.post("/lineups/:id/update", (req, res, next) => {
       res.send("Error to update lineups..." + error);
     });
 });
+
+
+//POST LINEUPS DELETE
+router.post("/lineups/:id/delete",(req,res,next)=>{
+  Lineup.findByIdAndRemove(req.params.id)
+  .then(()=>{
+    res.redirect("/lineups")
+  })
+  .catch((error) => {
+    res.send("Error to update lineups..." + error)
+  });
+})
 
 module.exports = router;
