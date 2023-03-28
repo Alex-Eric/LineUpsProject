@@ -40,7 +40,6 @@ router.get("/lineups", (req, res, next) => {
       return Lineup.find(filter).populate("map").populate("agent");
     })
     .then((lineupFromDB) => {
-      // res.render("lineups/lineups",{lineup: lineupFromDB,maps,agents});
       const data = {
         lineup: lineupFromDB,
         maps,
@@ -98,7 +97,7 @@ router.post(
   fileUploader.single("videoUrl"),
   (req, res, next) => {
     const { title, agent, map, lineUpType } = req.body;
-    Lineup.create({ title, videoUrl: req.file.path, lineUpType, map, agent })
+    Lineup.create({ title,creator:req.session.currentUser._id, videoUrl: req.file.path, lineUpType, map, agent })
       .then(() => {
         res.redirect("/lineups");
       })
