@@ -6,13 +6,14 @@ const lineUpSchema = {
     required: true,
 
   },
-  videoLineup: {
+  videoUrl: {
     type: String,
     required: true,
   },
-  attackDefense: {
+  lineUpType: {
     type: String,
     required: true,
+    enum: ["attack", "defense", "both"]
   },
   map: {
     type: Schema.Types.ObjectId,

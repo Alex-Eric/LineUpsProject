@@ -3,7 +3,7 @@
 <form action="/lineups/create" method="post" enctype="multipart/form-data">
   <label class="text-white">
     Upload a video
-    <input type="file" name="videoLineup" />
+    <input type="file" name="videoUrl" />
   </label>
   <label class="text-white">
     Title:
@@ -27,7 +27,7 @@
   </label>
   <label class="text-white">
     Attack/Defense:
-    <select name="attackDefense">
+    <select name="lineUpType">
       <option value="attack">Attack</option>
       <option value="defense">Defense</option>
       <option value="both">Both</option>

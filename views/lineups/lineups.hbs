@@ -23,7 +23,7 @@
   </label>
   <label class="text-white">
     Objective
-    <select name="attackDefense">
+    <select name="lineUpType">
       <option value="attack">Attack</option>
       <option value="defense">Defense</option>
       <option value="both">Both</option>
@@ -38,13 +38,13 @@
         <div class="card h-100">
             <h2>{{title}}</h2>
           <video poster="placeholder.png">
-            <source src={{videoLineup}} type="video/mp4" />
+            <source src={{videoUrl}} type="video/mp4" />
             Your browser does not support HTML video.
           </video>
           <div class="card-body">
             <h5 class="card-title">{{agent.name}}</h5>
             <h5 class="card-title">{{map.name}}</h5>
-            <h5 class="card-title">{{attackDefense}}</h5>
+            <h5 class="card-title">{{lineUpType}}</h5>
             <a href="/lineups/{{_id}}" class="btn btn-primary">More details</a>
           </div>
         </div>

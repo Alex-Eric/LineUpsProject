@@ -35,10 +35,10 @@ router.get("/lineups/create",isUserLoggedIn, (req, res, next) => {
 });
 
 
-router.post("/lineups/create",fileUploader.single('videoLineup'), (req, res, next) => {
+router.post("/lineups/create",fileUploader.single('videoUrl'), (req, res, next) => {
   console.log(req)
-  const {title,agent,map,attackDefense} = req.body
-  Lineup.create({title,videoLineup:req.file.path,attackDefense,map,agent})
+  const {title,agent,map,lineUpType} = req.body
+  Lineup.create({title,videoUrl:req.file.path,lineUpType,map,agent})
   .then(()=>{
     res.redirect("/lineups")
   })
@@ -60,8 +60,8 @@ router.get("/lineups/:id",(req, res, next) => {
 });
 
 router.get("/lineups/:id/lineups-update"),(req,res,next)=>{
-  const {title,agent,map,attackDefense} = req.params
-  Lineup.findById({title,agent,map,attackDefense})
+  const {title,agent,map,lineUpType} = req.params
+  Lineup.findById({title,agent,map,lineUpType})
   .then(()=>{
     res.render("/lineups/lineups-update")
   })
