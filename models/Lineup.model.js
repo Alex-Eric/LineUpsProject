@@ -4,7 +4,10 @@ const lineUpSchema = {
   title: {
     type: String,
     required: true,
-
+  },
+  creator: {
+    type: String,
+    required: true
   },
   videoUrl: {
     type: String,

@@ -47,7 +47,9 @@
             <h5 class="card-title">{{lineUpType}}</h5>
             <a href="/lineups/{{_id}}" class="btn btn-primary">More details</a>
             <form action="/lineups/{{_id}}/update">
+            {{#if loggedIn}}
               <button>Update</button>
+            {{/if}}
             </form>
           </div>
         </div>
