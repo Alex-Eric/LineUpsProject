@@ -3,7 +3,9 @@
 </div>
 <div class="text-end m-5">
   <a href="/lineups/create" class="btn btn-primary">Create lineup!</a>
+  <a href="/lineups/myLineups" class="btn btn-primary">See my lineups</a>
 </div>
+
 
 <form method="GET" action="/lineups">
   <label class="text-white">
@@ -48,10 +50,11 @@
             <h5 class="card-title">{{agent.name}}</h5>
             <h5 class="card-title">{{map.name}}</h5>
             <h5 class="card-title">{{lineUpType}}</h5>
-            <a href="/lineups/{{_id}}" class="btn btn-primary">More details</a>
+            <h5 class="card-title">{{creator.username}}</h5>
+            <a href="/lineups/{{_id}}" class="btn btn-primary mb-2">More details</a>
             <form action="/lineups/{{_id}}/update">
             {{#if loggedIn}}
-              <button>Update</button>
+              <button  class="btn btn-danger">Update</button>
             {{/if}}
             </form>
           </div>

@@ -37,7 +37,7 @@ router.get("/lineups", (req, res, next) => {
     })
     .then((agentsFromDB) => {
       agents = agentsFromDB;
-      return Lineup.find(filter).populate("map").populate("agent");
+      return Lineup.find(filter).populate("map").populate("agent").populate("creator");
     })
     .then((lineupFromDB) => {
       const data = {
@@ -48,7 +48,7 @@ router.get("/lineups", (req, res, next) => {
       lineupFromDB.forEach((element) => {
         if (
           req.session.currentUser &&
-          req.session.currentUser._id == element.creator
+          req.session.currentUser._id == element.creator._id
         ) {
           element.loggedIn = true;
         } else {
@@ -62,6 +62,61 @@ router.get("/lineups", (req, res, next) => {
     });
 });
 
+router.get("/lineups/myLineups",isLoggedIn,(req,res,next)=>{
+  const agentFilter = req.query.agent;
+  const mapFilter = req.query.map;
+  const lineUpTypeFilter = req.query.lineUpType;
+  let filter = {creator: {$eq: req.session.currentUser._id}};
+  if (agentFilter && mapFilter && lineUpTypeFilter) {
+    filter = {
+      agent: { $eq: agentFilter },
+      map: { $eq: mapFilter },
+      lineUpType: { $eq: lineUpTypeFilter },
+    };
+  }
+  if (agentFilter === "all") {
+    filter["agent"] = { $exists: true };
+  }
+  if (mapFilter === "all") {
+    filter["map"] = { $exists: true };
+  }
+  if (lineUpTypeFilter === "all") {
+    filter["lineUpType"] = { $exists: true };
+  }
+  let maps = [];
+  let agents = [];
+  Map.find()
+    .then((mapsFromDB) => {
+      maps = mapsFromDB;
+      return Agent.find();
+    })
+    .then((agentsFromDB) => {
+      agents = agentsFromDB;
+      return Lineup.find(filter).populate("map").populate("agent").populate("creator");
+    })
+    .then((lineupFromDB) => {
+
+      const data = {
+        lineup: lineupFromDB,
+        maps,
+        agents,
+      };
+      lineupFromDB.forEach((element) => {
+        if (
+          req.session.currentUser &&
+          req.session.currentUser._id == element.creator._id
+        ) {
+          element.loggedIn = true;
+        } else {
+          element.loggedIn = false;
+        }
+      });
+      res.render("lineups/lineups", data);
+    })
+    .catch((error) => {
+      res.send("Error to create lineups..." + error);
+    });
+})
 //GET CREATE LINEUPS
 router.get("/lineups/create", isLoggedIn, (req, res, next) => {
   let mapArray;
@@ -134,7 +189,20 @@ router.get("/lineups/:id", (req, res, next) => {
     .populate("map")
     .populate("agent")
     .then((lineupFromDB) => {
-      res.render("lineups/lineups-details", lineupFromDB);
+      const data = {
+        lineup: lineupFromDB
+      }
+      // lineupFromDB.forEach((element) => {
+        if (
+          req.session.currentUser &&
+          req.session.currentUser._id == lineupFromDB.creator
+        ) {
+          data.loggedIn = true;
+        } else {
+          data.loggedIn = false;
+        }
+      // });
+      res.render("lineups/lineups-details", data);
     })
     .catch((error) => {
       res.send("Error to create lineups..." + error);

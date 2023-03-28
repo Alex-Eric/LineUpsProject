@@ -6,8 +6,8 @@ const lineUpSchema = {
     required: true,
   },
   creator: {
-    type: String,
-    required: true
+    type: Schema.Types.ObjectId,
+    ref: "User",
   },
   videoUrl: {
     type: String,

@@ -1,16 +1,19 @@
 <div class="container text-center">
   <div class="product mb-3">
-    <h2 class="text-white">{{title}}</h2>
+    <h2 class="text-white">{{lineup.title}}</h2>
     <video poster="placeholder.png" controls>
-      <source src={{videoUrl}} type="video/mp4" />
+      <source src={{lineup.videoUrl}} type="video/mp4" />
       Your browser does not support HTML video.
     </video>
     <div class="card-body">
-      <h5 class="card-title text-white">{{agent.name}}</h5>
-      <h5 class="card-title text-white">{{map.name}}</h5>
-      <h5 class="card-title text-white">{{lineUpType}}</h5>
+      <h5 class="card-title text-white">{{lineup.agent.name}}</h5>
+      <h5 class="card-title text-white">{{lineup.map.name}}</h5>
+      <h5 class="card-title text-white">{{lineup.lineUpType}}</h5>
       <form action="/lineups/{{id}}/delete" method="post">
-        <button>Delete</button>
+        {{#if loggedIn}}
+          <button class="btn btn-danger">Delete</button>
+        {{/if}}
+
       </form>
     </div>
   </div>
