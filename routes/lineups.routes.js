@@ -10,12 +10,36 @@ const { route } = require('./maps.routes');
 
 //GET LINEUPS
 router.get("/lineups", (req, res, next) => {
-  
-  Lineup.find()
-  .populate("map")
-  .populate("agent")
+  const agentFilter = req.query.agent
+  const mapFilter = req.query.map
+  const lineUpTypeFilter = req.query.lineUpType
+  let filter = {}
+  if (agentFilter&&mapFilter&&lineUpTypeFilter){
+    filter = {agent: {$eq: agentFilter},map:{$eq: mapFilter},lineUpType:{$eq: lineUpTypeFilter}}
+  } 
+  if (agentFilter === "all"){
+    filter["agent"] = {$exists:true}
+  }
+  if (mapFilter === "all"){
+    filter["map"] = {$exists:true}
+  }
+  if (lineUpTypeFilter === "all"){
+    filter["lineUpType"] = {$exists:true}
+  }
+  console.log(filter)
+  let maps = []
+  let agents = []
+  Map.find()
+  .then((mapsFromDB)=>{
+    maps = mapsFromDB
+    return Agent.find()
+  })
+  .then((agentsFromDB)=>{
+    agents = agentsFromDB
+    return Lineup.find(filter).populate("map").populate("agent")
+  })
   .then(lineupFromDB=>{
-    res.render("lineups/lineups",{lineup:lineupFromDB});
+    res.render("lineups/lineups",{lineup: lineupFromDB,maps,agents});
   })
   .catch((error) => {
     res.send("Error to create lineups..." + error)

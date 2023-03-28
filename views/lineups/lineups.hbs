@@ -4,39 +4,42 @@
 <div class="text-end m-5">
   <a href="/lineups/create" class="btn btn-primary">Create lineup!</a>
 </div>
+
 <form method="GET" action="/lineups">
-    <label class="text-white">
+  <label class="text-white">
     Agent:
     <select name="agent">
-      {{#each lineup}}
-        <option value={{agent._id}}>{{agent.name}}</option>
+      <option value="all" selected>All agents</option>
+      {{#each agents}}
+        <option value={{this._id}}>{{this.name}}</option>
       {{/each}}
     </select>
   </label>
   <label class="text-white">
     Map:
     <select name="map">
-      {{#each lineup}}
-        <option value={{map._id}} >{{map.name}}</option>
+      <option value="all" selected>All maps</option>
+      {{#each maps}}
+        <option value={{this._id}}>{{this.name}}</option>
       {{/each}}
     </select>
   </label>
   <label class="text-white">
     Objective
     <select name="lineUpType">
+      <option value="all" selected>All objectives</option>
       <option value="attack">Attack</option>
       <option value="defense">Defense</option>
-      <option value="both">Both</option>
     </select>
   </label>
-    <button type="submit">Search</button>
-  </form>
+  <button type="submit">Search</button>
+</form>
 <div class="container text-center">
   <div class="row">
     {{#each lineup}}
       <div class="col-12 col-md-4 product mb-3">
         <div class="card h-100">
-            <h2>{{title}}</h2>
+          <h2>{{title}}</h2>
           <video poster="placeholder.png">
             <source src={{videoUrl}} type="video/mp4" />
             Your browser does not support HTML video.
