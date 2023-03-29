@@ -6,12 +6,12 @@
       Your browser does not support HTML video.
     </video>
     <div class="card-body">
-      <h5 class="card-title text-white">{{lineup.agent.name}}</h5>
-      <h5 class="card-title text-white">{{lineup.map.name}}</h5>
-      <h5 class="card-title text-white">{{lineup.lineUpType}}</h5>
+      <h5 class="card-title text-bg-danger d-inline p-1 rounded-pill">{{lineup.agent.name}}</h5>
+      <h5 class="card-title text-bg-danger d-inline p-1 rounded-pill">{{lineup.map.name}}</h5>
+      <h5 class="card-title text-bg-danger d-inline p-1 rounded-pill">{{lineup.lineUpType}}</h5>
       <form action="/lineups/{{id}}/delete" method="post">
         {{#if loggedIn}}
-          <button class="btn btn-danger">Delete</button>
+          <button class="btn btn-danger mt-3 p-3">Delete</button>
         {{/if}}
 
       </form>

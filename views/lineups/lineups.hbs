@@ -48,17 +48,17 @@
   <div class="row">
     {{#each lineup}}
       <div class="col-12 col-md-4 product mb-3">
-        <div class="card h-100">
+        <div class="card">
           <h2>{{title}}</h2>
           <video poster="placeholder.png">
             <source src={{videoUrl}} type="video/mp4" />
             Your browser does not support HTML video.
           </video>
           <div class="card-body">
-            <h5 class="card-title">{{agent.name}}</h5>
-            <h5 class="card-title">{{map.name}}</h5>
-            <h5 class="card-title">{{lineUpType}}</h5>
-            <h5 class="card-title">{{creator.username}}</h5>
+            <h5 class="card-title text-bg-danger d-inline p-1 rounded-pill">{{agent.name}}</h5>
+            <h5 class="card-title text-bg-danger d-inline p-1 rounded-pill">{{map.name}}</h5>
+            <h5 class="card-title text-bg-danger d-inline p-1 rounded-pill">{{lineUpType}}</h5>
+            <h5 class="card-title mt-2">By <span class="text-danger">{{creator.username}}</span></h5>
             <a href="/lineups/{{_id}}" class="btn btn-primary mb-2">More details</a>
             <form action="/lineups/{{_id}}/update">
               {{#if loggedIn}}
