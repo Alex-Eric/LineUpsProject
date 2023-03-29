@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const fileUploader = require("../config/cloudinary.config");
-const Lineup = require("../models/lineup.model");
+const Lineup = require("../models/Lineup.model");
 const Map = require("../models/Map.model");
 const Agent = require("../models/Agent.model");
 const isLoggedIn = require("../middleware/isLoggedIn");
-const { route } = require("./maps.routes");
+
 
 router.get("/lineups", (req, res, next) => {
   const agentFilter = req.query.agent;
