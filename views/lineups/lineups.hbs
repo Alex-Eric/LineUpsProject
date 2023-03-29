@@ -2,8 +2,8 @@
   <h1 class="text-white">LINEUPS</h1>
 </div>
 <div class="text-center m-5">
-  <a href="/lineups/create" class="btn btn-primary w-25">Create lineup!</a>
-  <a href="/lineups/myLineups" class="btn btn-primary w-25">See my lineups</a>
+  <a href="/lineups/create" class="btn btn-danger w-25">Create lineup!</a>
+  <a href="/lineups/myLineups" class="btn btn-danger w-25">See my lineups</a>
 </div>
 
 <form method="GET" action="/lineups">
@@ -91,10 +91,10 @@
                 </button>
               </form>
             </div>
-            <a href="/lineups/{{_id}}" class="btn btn-outline-danger mb-2 d-block">More details</a>
+            <a href="/lineups/{{_id}}" class="btn btn-danger mb-2 d-block">More details</a>
             <form action="/lineups/{{_id}}/update">
               {{#if loggedIn}}
-                <button class="btn btn-danger d-block w-100">Update</button>
+                <button class="btn btn-outline-danger d-block w-100">Update</button>
               {{/if}}
             </form>
           </div>
