@@ -26,6 +26,14 @@ const lineUpSchema = {
     type: Schema.Types.ObjectId,
     ref: "Agent",
   },
+  ranking: {
+    type: Number,
+    default: 0
+  },
+  userVoted: {
+    type: [Schema.Types.ObjectId],
+    ref: "User",
+  }
 };
 
 module.exports = model("lineup", lineUpSchema);

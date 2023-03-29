@@ -37,7 +37,10 @@ router.get("/lineups", (req, res, next) => {
     })
     .then((agentsFromDB) => {
       agents = agentsFromDB;
-      return Lineup.find(filter).populate("map").populate("agent").populate("creator");
+      return Lineup.find(filter)
+        .populate("map")
+        .populate("agent")
+        .populate("creator");
     })
     .then((lineupFromDB) => {
       const data = {
@@ -62,11 +65,11 @@ router.get("/lineups", (req, res, next) => {
     });
 });
 
-router.get("/lineups/myLineups",isLoggedIn,(req,res,next)=>{
+router.get("/lineups/myLineups", isLoggedIn, (req, res, next) => {
   const agentFilter = req.query.agent;
   const mapFilter = req.query.map;
   const lineUpTypeFilter = req.query.lineUpType;
-  let filter = {creator: {$eq: req.session.currentUser._id}};
+  let filter = { creator: { $eq: req.session.currentUser._id } };
   if (agentFilter && mapFilter && lineUpTypeFilter) {
     filter = {
       agent: { $eq: agentFilter },
@@ -92,10 +95,12 @@ router.get("/lineups/myLineups",isLoggedIn,(req,res,next)=>{
     })
     .then((agentsFromDB) => {
       agents = agentsFromDB;
-      return Lineup.find(filter).populate("map").populate("agent").populate("creator");
+      return Lineup.find(filter)
+        .populate("map")
+        .populate("agent")
+        .populate("creator");
     })
     .then((lineupFromDB) => {
-
       const data = {
         lineup: lineupFromDB,
         maps,
@@ -116,7 +121,7 @@ router.get("/lineups/myLineups",isLoggedIn,(req,res,next)=>{
     .catch((error) => {
       res.send("Error to create lineups..." + error);
     });
-})
+});
 //GET CREATE LINEUPS
 router.get("/lineups/create", isLoggedIn, (req, res, next) => {
   let mapArray;
@@ -152,7 +157,14 @@ router.post(
   fileUploader.single("videoUrl"),
   (req, res, next) => {
     const { title, agent, map, lineUpType } = req.body;
-    Lineup.create({ title,creator:req.session.currentUser._id, videoUrl: req.file.path, lineUpType, map, agent })
+    Lineup.create({
+      title,
+      creator: req.session.currentUser._id,
+      videoUrl: req.file.path,
+      lineUpType,
+      map,
+      agent,
+    })
       .then(() => {
         res.redirect("/lineups");
       })
@@ -184,23 +196,60 @@ router.post(
   }
 );
 
+router.post("/rankingup/:id",isLoggedIn,(req,res,next)=>{
+  Lineup.findById(req.params.id)
+  .then(lineupFromDB=>{
+    const rankingFromDB = lineupFromDB.ranking
+    const userVotedArray = lineupFromDB.userVoted
+    if(!lineupFromDB.userVoted.includes(req.session.currentUser._id)) {
+      userVotedArray.push(req.session.currentUser._id)
+      return lineupFromDB.updateOne({ranking:rankingFromDB+1,userVoted:userVotedArray})
+    }
+  })
+  .then(()=>{
+    res.redirect("/lineups")
+  })
+  .catch((error) => {
+    res.send("Error to ranking..." + error);
+  });
+})
+
+router.post("/rankingdown/:id",isLoggedIn,(req,res,next)=>{
+  Lineup.findById(req.params.id)
+  .then(lineupFromDB=>{
+    const rankingFromDB = lineupFromDB.ranking
+    const userVotedArray = lineupFromDB.userVoted
+    if(lineupFromDB.userVoted.includes(req.session.currentUser._id)) {
+      const index = userVotedArray.indexOf(req.session.currentUser._id)
+      userVotedArray.splice(index,1)
+      return lineupFromDB.updateOne({ranking:rankingFromDB-1,userVoted:userVotedArray})
+    }
+  })
+  .then(()=>{
+    res.redirect("/lineups")
+  })
+  .catch((error) => {
+    res.send("Error to ranking..." + error);
+  });
+})
+
 router.get("/lineups/:id", (req, res, next) => {
   Lineup.findById(req.params.id)
     .populate("map")
     .populate("agent")
     .then((lineupFromDB) => {
       const data = {
-        lineup: lineupFromDB
-      }
+        lineup: lineupFromDB,
+      };
       // lineupFromDB.forEach((element) => {
-        if (
-          req.session.currentUser &&
-          req.session.currentUser._id == lineupFromDB.creator
-        ) {
-          data.loggedIn = true;
-        } else {
-          data.loggedIn = false;
-        }
+      if (
+        req.session.currentUser &&
+        req.session.currentUser._id == lineupFromDB.creator
+      ) {
+        data.loggedIn = true;
+      } else {
+        data.loggedIn = false;
+      }
       // });
       res.render("lineups/lineups-details", data);
     })
