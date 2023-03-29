@@ -1,52 +1,66 @@
-<h2 class="text-white text-center">Create a lineup!</h2>
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+            <div class="mb-md-5 mt-md-4 pb-5">
+              <form action="/lineups/create" method="POST" enctype="multipart/form-data">
+                <h2 class="fw-bold mb-2 text-uppercase">CREATE LineUp</h2>
+                <p class="text-white-50 mb-5">Enter fields</p>
 
-<form action="/lineups/create" method="post" enctype="multipart/form-data">
-  <div class="row d-flex justify-content-center align-items-center">
-    <div class="col-7">
-      <label class="form-label text-white">
-        Upload a video
-      </label>
-      <input type="file" name="videoUrl" class="btn btn-dark text-white"/>
-    </div>
-    <div class="col-7">
-      <label class="form-label text-white">
-        Title:
-      </label>
-        <input type="text" name="title" class="form-control"/>
-    </div>
-    <div class="col-7">
-      <label class="form-label text-white">
-        Agent:
-      </label>
-        <select name="agent" class="form-select">
-          {{#each agents}}
-            <option value={{this._id}}>{{this.name}}</option>
-          {{/each}}
-        </select>
-    </div>
-    <div class="col-7">
-      <label class="form-label text-white">
-        Map:
-      </label>
-        <select name="map" class="form-select">
-          {{#each maps}}
-            <option value={{this._id}}>{{this.name}}</option>
-          {{/each}}
-        </select>
-    </div>
-    <div class="col-7">
-      <label class="form-label text-white">
-        Attack/Defense:
-      </label>
-        <select name="lineUpType" class="form-select">
-          <option value="attack">Attack</option>
-          <option value="defense">Defense</option>
-        </select>
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label">TITLE</label>
+                  <input
+                    class="form-control form-control-lg"
+                    type="text"
+                    name="title" 
+                    value={{lineup.title}}
+                  />
+                </div>
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label">TITLE</label>
+                  <input
+                    name="videoUrl"
+                    class="form-control form-control-lg"
+                    type="file"
+                  />
+                </div>
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label">AGENT</label>
+                  <select name="agent" class="form-select">
+                    {{#each agents}}
+                      <option value={{this._id}}>{{this.name}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label">MAP</label>
+                  <select name="map" class="form-select">
+                    {{#each maps}}
+                      <option value={{this._id}}>{{this.name}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+
+                <div class="form-outline form-white mb-4">
+                  <label class="form-label">ATTACK / DEFENSE</label>
+                  <select name="lineUpType" class="form-select">
+                    <option value="attack">Attack</option>
+                    <option value="defense">Defense</option>
+                  </select>
+                </div>
+                <hr>
+                <br>
+                <button
+                  class="btn btn-outline-light btn-lg px-5"
+                >CREATE</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="row mt-4 justify-content-center">
-    <div class="col-4">
-      <button class="btn btn-secondary w-100">Create</button>
-    </div>
-  </div>
-</form>
+</section>
