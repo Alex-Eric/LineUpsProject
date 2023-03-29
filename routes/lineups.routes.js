@@ -6,12 +6,12 @@ const Map = require("../models/Map.model");
 const Agent = require("../models/Agent.model");
 const isLoggedIn = require("../middleware/isLoggedIn");
 
-
 router.get("/lineups", (req, res, next) => {
   const agentFilter = req.query.agent;
   const mapFilter = req.query.map;
   const lineUpTypeFilter = req.query.lineUpType;
   let filter = {};
+  console.log(req.query);
   if (agentFilter && mapFilter && lineUpTypeFilter) {
     filter = {
       agent: { $eq: agentFilter },
@@ -31,16 +31,49 @@ router.get("/lineups", (req, res, next) => {
   let maps = [];
   let agents = [];
   Map.find()
+    .sort({ name: 1 })
     .then((mapsFromDB) => {
       maps = mapsFromDB;
-      return Agent.find();
+      return Agent.find().sort({ name: 1 });
     })
     .then((agentsFromDB) => {
       agents = agentsFromDB;
-      return Lineup.find(filter)
-        .populate("map")
-        .populate("agent")
-        .populate("creator");
+      switch (req.query.sort) {
+        case "ratingSort":
+          return Lineup.find(filter)
+            .sort({ ranking: -1 })
+            .populate("map")
+            .populate("agent")
+            .populate("creator");
+          break;
+        case "agentsSort":
+          return Lineup.find(filter)
+            .sort({ agent: 1 })
+            .populate("map")
+            .populate("agent")
+            .populate("creator");
+          break;
+        case "mapsSort":
+          return Lineup.find(filter)
+            .sort({ maps: -1 })
+            .populate("map")
+            .populate("agent")
+            .populate("creator");
+          break;
+        case "lineupTypeSort":
+          return Lineup.find(filter)
+            .sort({ lineUpType: -1 })
+            .populate("map")
+            .populate("agent")
+            .populate("creator");
+          break;
+        default:
+          return Lineup.find(filter)
+            .populate("map")
+            .populate("agent")
+            .populate("creator");
+          break;
+      }
     })
     .then((lineupFromDB) => {
       const data = {
@@ -125,20 +158,10 @@ router.get("/lineups/myLineups", isLoggedIn, (req, res, next) => {
 //GET CREATE LINEUPS
 router.get("/lineups/create", isLoggedIn, (req, res, next) => {
   let mapArray;
-  Map.find()
+  Map.find().sort({name:1})
     .then((mapsArray) => {
       mapArray = mapsArray;
-      return Agent.find();
-    })
-    .then((agentsArray) => {
-      res.render("lineups/lineups-create", {
-        maps: mapArray,
-        agents: agentsArray,
-      });
-    })
-    .then((mapsArray) => {
-      mapArray = mapsArray;
-      return Agent.find();
+      return Agent.find().sort({name:1});
     })
     .then((agentsArray) => {
       res.render("lineups/lineups-create", {
@@ -196,42 +219,48 @@ router.post(
   }
 );
 
-router.post("/rankingup/:id",isLoggedIn,(req,res,next)=>{
+router.post("/rankingup/:id", isLoggedIn, (req, res, next) => {
   Lineup.findById(req.params.id)
-  .then(lineupFromDB=>{
-    const rankingFromDB = lineupFromDB.ranking
-    const userVotedArray = lineupFromDB.userVoted
-    if(!lineupFromDB.userVoted.includes(req.session.currentUser._id)) {
-      userVotedArray.push(req.session.currentUser._id)
-      return lineupFromDB.updateOne({ranking:rankingFromDB+1,userVoted:userVotedArray})
-    }
-  })
-  .then(()=>{
-    res.redirect("/lineups")
-  })
-  .catch((error) => {
-    res.send("Error to ranking..." + error);
-  });
-})
+    .then((lineupFromDB) => {
+      const rankingFromDB = lineupFromDB.ranking;
+      const userVotedArray = lineupFromDB.userVoted;
+      if (!lineupFromDB.userVoted.includes(req.session.currentUser._id)) {
+        userVotedArray.push(req.session.currentUser._id);
+        return lineupFromDB.updateOne({
+          ranking: rankingFromDB + 1,
+          userVoted: userVotedArray,
+        });
+      }
+    })
+    .then(() => {
+      res.redirect("/lineups");
+    })
+    .catch((error) => {
+      res.send("Error to ranking..." + error);
+    });
+});
 
-router.post("/rankingdown/:id",isLoggedIn,(req,res,next)=>{
+router.post("/rankingdown/:id", isLoggedIn, (req, res, next) => {
   Lineup.findById(req.params.id)
-  .then(lineupFromDB=>{
-    const rankingFromDB = lineupFromDB.ranking
-    const userVotedArray = lineupFromDB.userVoted
-    if(lineupFromDB.userVoted.includes(req.session.currentUser._id)) {
-      const index = userVotedArray.indexOf(req.session.currentUser._id)
-      userVotedArray.splice(index,1)
-      return lineupFromDB.updateOne({ranking:rankingFromDB-1,userVoted:userVotedArray})
-    }
-  })
-  .then(()=>{
-    res.redirect("/lineups")
-  })
-  .catch((error) => {
-    res.send("Error to ranking..." + error);
-  });
-})
+    .then((lineupFromDB) => {
+      const rankingFromDB = lineupFromDB.ranking;
+      const userVotedArray = lineupFromDB.userVoted;
+      if (lineupFromDB.userVoted.includes(req.session.currentUser._id)) {
+        const index = userVotedArray.indexOf(req.session.currentUser._id);
+        userVotedArray.splice(index, 1);
+        return lineupFromDB.updateOne({
+          ranking: rankingFromDB - 1,
+          userVoted: userVotedArray,
+        });
+      }
+    })
+    .then(() => {
+      res.redirect("/lineups");
+    })
+    .catch((error) => {
+      res.send("Error to ranking..." + error);
+    });
+});
 
 router.get("/lineups/:id", (req, res, next) => {
   Lineup.findById(req.params.id)
@@ -270,9 +299,10 @@ router.get("/lineups/:id/update", isLoggedIn, (req, res, next) => {
       agents = agentsFromDB;
       return Lineup.findById(req.params.id).populate("agent").populate("map");
     })
-    .then((lineupFromDb) => {
+    .then((lineupFromDB) => {
+      console.log(lineupFromDB)
       res.render("lineups/lineups-update", {
-        lineup: lineupFromDb,
+        lineup: lineupFromDB,
         maps,
         agents,
       });
@@ -285,8 +315,8 @@ router.get("/lineups/:id/update", isLoggedIn, (req, res, next) => {
 //POST LINEUPS UPDATE
 router.post("/lineups/:id/update", (req, res, next) => {
   const { title, agent, map, lineUpType } = req.body;
-  Lineup.findByIdAndUpdate(req.params.id, { title, agent, map, lineUpType })
-    .then(() => {
+  Lineup.findByIdAndUpdate(req.params.id, { title, agent, map, lineUpType },{new:true})
+    .then((x) => {
       res.redirect("/lineups");
     })
     .catch((error) => {
