@@ -158,10 +158,11 @@ router.get("/lineups/myLineups", isLoggedIn, (req, res, next) => {
 //GET CREATE LINEUPS
 router.get("/lineups/create", isLoggedIn, (req, res, next) => {
   let mapArray;
-  Map.find().sort({name:1})
+  Map.find()
+    .sort({ name: 1 })
     .then((mapsArray) => {
       mapArray = mapsArray;
-      return Agent.find().sort({name:1});
+      return Agent.find().sort({ name: 1 });
     })
     .then((agentsArray) => {
       res.render("lineups/lineups-create", {
@@ -180,41 +181,37 @@ router.post(
   fileUploader.single("videoUrl"),
   (req, res, next) => {
     const { title, agent, map, lineUpType } = req.body;
-    Lineup.create({
-      title,
-      creator: req.session.currentUser._id,
-      videoUrl: req.file.path,
-      lineUpType,
-      map,
-      agent,
-    })
-      .then(() => {
-        res.redirect("/lineups");
+    let mapArray;
+    Map.find()
+      .sort({ name: 1 })
+      .then((mapsArray) => {
+        mapArray = mapsArray;
+        return Agent.find().sort({ name: 1 });
       })
-      .catch((error) => {
-        res.send("Error to create lineups..." + error);
-      });
-  }
-);
-
-router.post(
-  "/lineups/create",
-  fileUploader.single("videoUrl"),
-  (req, res, next) => {
-    const { title, agent, map, lineUpType } = req.body;
-    Lineup.create({
-      title,
-      creator: req.session.currentUser._id,
-      videoUrl: req.file.path,
-      lineUpType,
-      map,
-      agent,
-    })
-      .then(() => {
-        res.redirect("/lineups");
-      })
-      .catch((error) => {
-        res.send("Error to create lineups..." + error);
+      .then((agentsArray) => {
+        if (title === "" || req.file === undefined) {
+          res.status(400).render("lineups/lineups-create", {
+            errorMessage:
+              "All fields are mandatory. Please provide title and video.",
+              maps: mapArray,
+              agents: agentsArray
+          });
+        } else {
+          Lineup.create({
+            title,
+            creator: req.session.currentUser._id,
+            videoUrl: req.file.path,
+            lineUpType,
+            map,
+            agent,
+          })
+            .then(() => {
+              res.redirect("/lineups");
+            })
+            .catch((error) => {
+              res.send("Error to create lineups..." + error);
+            });
+        }
       });
   }
 );
@@ -300,7 +297,7 @@ router.get("/lineups/:id/update", isLoggedIn, (req, res, next) => {
       return Lineup.findById(req.params.id).populate("agent").populate("map");
     })
     .then((lineupFromDB) => {
-      console.log(lineupFromDB)
+      console.log(lineupFromDB);
       res.render("lineups/lineups-update", {
         lineup: lineupFromDB,
         maps,
@@ -315,7 +312,11 @@ router.get("/lineups/:id/update", isLoggedIn, (req, res, next) => {
 //POST LINEUPS UPDATE
 router.post("/lineups/:id/update", (req, res, next) => {
   const { title, agent, map, lineUpType } = req.body;
-  Lineup.findByIdAndUpdate(req.params.id, { title, agent, map, lineUpType },{new:true})
+  Lineup.findByIdAndUpdate(
+    req.params.id,
+    { title, agent, map, lineUpType },
+    { new: true }
+  )
     .then((x) => {
       res.redirect("/lineups");
     })

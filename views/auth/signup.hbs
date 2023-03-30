@@ -8,14 +8,14 @@
             <div class="mb-md-5 mt-md-4 pb-5">
               <form action="/auth/signup" method="POST">
                 <h2 class="fw-bold mb-2 text-uppercase">Sign Up</h2>
-                <div class="form-outline form-white mb-4">
+                <div class="form-outline form-white m-4">
                   <label class="form-label" for="typeEmailX">Username</label>
                   <input name="username"
                     type="text"
                     id="typeEmailX"
                     class="form-control form-control-lg"
                   />
-                <div class="form-outline form-white mb-4">
+                <div class="form-outline form-white mb-4 mt-4">
                   <label class="form-label" for="typeEmailX">Email</label>
                   <input name="email"
                     type="email"
@@ -38,9 +38,9 @@
                   class="btn btn-outline-light btn-lg px-5"
                   type="submit"
                 >Sign Up</button>
-                {{#if errorMessage}}
-                  <p class="error">{{errorMessage}}</p>
-                {{/if}}
+                <div class="form-outline form-white mt-4">
+                {{errorMessage}}
+                </div>
               </form>
             </div>
           </div>
