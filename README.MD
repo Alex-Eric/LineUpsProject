@@ -11,7 +11,7 @@ In this web page you can see a lot information from Valorant, a shooter game by 
 - Create a .env file with variables of Database and Cloudinary Account
 - Run the application: npm run dev
 
-## functionalities:
+## Functionalities:
 - Register, Login, Logout
 - Display, reproduce, create, update, delete Lineups (If you are the creator)
 - Display Maps and Agents from Valorant API
