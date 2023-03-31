@@ -277,10 +277,10 @@ router.get("/lineups/:id", (req, res, next) => {
 router.get("/lineups/:id/update", isLoggedIn, (req, res, next) => {
   let maps = [];
   let agents = [];
-  Map.find()
+  Map.find().sort({ name: 1 })
     .then((mapsFromDB) => {
       maps = mapsFromDB;
-      return Agent.find();
+      return Agent.find().sort({ name: 1 });;
     })
     .then((agentsFromDB) => {
       agents = agentsFromDB;

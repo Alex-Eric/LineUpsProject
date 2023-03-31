@@ -6,7 +6,7 @@
     {{#each data}}
       {{#if isPlayableCharacter}}
         <div class="col-12 col-md-4 product mb-3">
-          <div class="card h-100">
+          <div class="card">
             <img
               src={{displayIcon}}
               class="card-img-top"
@@ -17,7 +17,7 @@
               <p class="card-text">
                 {{description}}
               </p>
-              <a href="/agents/{{uuid}}" class="btn btn-primary">More details</a>
+              <a href="/agents/{{uuid}}" class="btn btn-danger mb-2 d-block">More details</a>
             </div>
           </div>
         </div>
