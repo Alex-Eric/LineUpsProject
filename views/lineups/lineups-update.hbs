@@ -1,4 +1,3 @@
-
 <section class="vh-100 gradient-custom">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
@@ -15,7 +14,7 @@
                   <input
                     class="form-control form-control-lg"
                     type="text"
-                    name="title" 
+                    name="title"
                     value="{{lineup.title}}"
                   />
                 </div>
@@ -44,11 +43,20 @@
                     <option value="defense">Defense</option>
                   </select>
                 </div>
-                <br>
+                <br />
                 <button
                   class="btn btn-outline-light btn-lg px-5"
                 >Update</button>
+                <br />
               </form>
+              <form action="/lineups/{{lineup._id}}/delete" method="post">
+                <button
+                  class="btn btn-outline-danger btn-lg px-5 mt-3"
+                >Delete</button>
+              </form>
+              <div class="form-outline form-white mt-4">
+                {{errorMessage}}
+              </div>
             </div>
           </div>
         </div>

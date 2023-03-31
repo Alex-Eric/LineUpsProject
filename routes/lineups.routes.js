@@ -193,8 +193,8 @@ router.post(
           res.status(400).render("lineups/lineups-create", {
             errorMessage:
               "All fields are mandatory. Please provide title and video.",
-              maps: mapArray,
-              agents: agentsArray
+            maps: mapArray,
+            agents: agentsArray,
           });
         } else {
           Lineup.create({
@@ -267,16 +267,6 @@ router.get("/lineups/:id", (req, res, next) => {
       const data = {
         lineup: lineupFromDB,
       };
-      // lineupFromDB.forEach((element) => {
-      if (
-        req.session.currentUser &&
-        req.session.currentUser._id == lineupFromDB.creator
-      ) {
-        data.loggedIn = true;
-      } else {
-        data.loggedIn = false;
-      }
-      // });
       res.render("lineups/lineups-details", data);
     })
     .catch((error) => {
@@ -297,7 +287,6 @@ router.get("/lineups/:id/update", isLoggedIn, (req, res, next) => {
       return Lineup.findById(req.params.id).populate("agent").populate("map");
     })
     .then((lineupFromDB) => {
-      console.log(lineupFromDB);
       res.render("lineups/lineups-update", {
         lineup: lineupFromDB,
         maps,
@@ -312,17 +301,39 @@ router.get("/lineups/:id/update", isLoggedIn, (req, res, next) => {
 //POST LINEUPS UPDATE
 router.post("/lineups/:id/update", (req, res, next) => {
   const { title, agent, map, lineUpType } = req.body;
-  Lineup.findByIdAndUpdate(
-    req.params.id,
-    { title, agent, map, lineUpType },
-    { new: true }
-  )
-    .then((x) => {
-      res.redirect("/lineups");
-    })
-    .catch((error) => {
-      res.send("Error to update lineups..." + error);
-    });
+  if (title === "") {
+    let maps = [];
+    let agents = [];
+    Map.find()
+      .then((mapsFromDB) => {
+        maps = mapsFromDB;
+        return Agent.find();
+      })
+      .then((agentsFromDB) => {
+        agents = agentsFromDB;
+        return Lineup.findById(req.params.id).populate("agent").populate("map");
+      })
+      .then((lineupFromDB) => {
+        res.status(400).render("lineups/lineups-update", {
+          errorMessage: "All fields are mandatory. Please provide title.",
+          lineup: lineupFromDB,
+          maps,
+          agents,
+        });
+      });
+  } else {
+    Lineup.findByIdAndUpdate(
+      req.params.id,
+      { title, agent, map, lineUpType },
+      { new: true }
+    )
+      .then((x) => {
+        res.redirect("/lineups");
+      })
+      .catch((error) => {
+        res.send("Error to update lineups..." + error);
+      });
+  }
 });
 
 //POST LINEUPS DELETE

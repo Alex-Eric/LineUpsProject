@@ -1,20 +1,14 @@
 <div class="container text-center">
   <div class="product mb-3">
-    <h2 class="text-white">{{lineup.title}}</h2>
-    <video poster="placeholder.png" controls>
+    <h2 class="text-white fs-1">{{lineup.title}}</h2>
+    <video controls class="h-75 mb-3">
       <source src={{lineup.videoUrl}} type="video/mp4" />
       Your browser does not support HTML video.
     </video>
     <div class="card-body">
-      <h5 class="card-title text-bg-danger d-inline p-1 rounded-pill">{{lineup.agent.name}}</h5>
-      <h5 class="card-title text-bg-danger d-inline p-1 rounded-pill">{{lineup.map.name}}</h5>
-      <h5 class="card-title text-bg-danger d-inline p-1 rounded-pill">{{lineup.lineUpType}}</h5>
-      <form action="/lineups/{{lineup._id}}/delete" method="post">
-        {{#if loggedIn}}
-          <button class="btn btn-danger mt-3 p-3">Delete</button>
-        {{/if}}
-
-      </form>
+      <h5 class="card-title text-bg-danger fs-4 d-inline p-1 px-3 rounded-pill">{{lineup.agent.name}}</h5>
+      <h5 class="card-title text-bg-danger fs-4 d-inline p-1 px-3 rounded-pill">{{lineup.map.name}}</h5>
+      <h5 class="card-title text-bg-danger fs-4 d-inline p-1 px-3 rounded-pill">{{lineup.lineUpType}}</h5>
     </div>
   </div>
 </div>
